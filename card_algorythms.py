@@ -1,20 +1,180 @@
 import random
 
+def binary_search(arr, target):
+    """
+    Preforms Binary search on a sorted list
+    
+    Args:
+        arr(list): a sorted list of nums
+        target(int or float): the value to search for
+
+    Example:
+        binary_search([range(1, 10)], 6)
+        >>> 5
+        
+        binary_search([range(1, 10, 2)], 4)
+        >>> -1
+    """
+    
+    low = 0
+    high = len(arr) - 1
+    mid = 0
+    
+    i = 0
+    while low <= high:
+        mid = (high + low) // 2 #find mid point through average
+        
+        #if target is equal to the middle elemtnt
+        if arr[mid] == target:
+            return mid
+        #if target is greater, ignore left half
+        elif arr[mid] < target:
+            low = mid + 1
+        #if target is smaller, ignore right side
+        else:
+            high = mid - 1
+            
+    #target not found
+    return -1
+
 def all_equal(arr):
+    """
+    Checks an array of cards to check if all ranks are equal
+
+    Args:
+        (list)arr: an array of cards (suit, rank)
+
+    Return:
+        True: if all cards are equal
+        False: if cards arent all equal
+
+    Example:
+        card_list = [('Hearts', '4'), ('Spades', '6'), ('Spades', '3'), ('Clubs', '6'), ('Spades', '6'), ('Diamonds', '10'), ('Clubs', '10'), ('Hearts', '5')]
+        print(all_equal(card_list))
+        >>> False
+
+        card_list = [('Hearts', '3') , ('Clubs', '3'), ('Diamonds', '5')]
+        print(all_equal(card_list))
+        >>> True
+    """
+    #create the list of just the ranks
     list = [x[1] for x in arr]
-    print(list)
+    #get its length due to it being reused 
+    LIST_LEN = len(list)
+
+    #if the list is greater than 4 there is no way for it to be all equal due to there being only one card per suit
+    if LIST_LEN > 4:
+        return False
+
+    #check if one of the cards are not equal and go through the whole list
+    #we can return false right away due to the fact that if one is not equal the whole list cannot be equal
+    for i in range(1, LIST_LEN):
+        if list[i - 1] != list[i]:
+            return False
+
+    #if it has no return yet we can just return true because the check hasnt returned false
     return True
 
 def shuffle(arr):
-    return True
+    set(arr)
+    list(arr)
+    return arr
     
 def three_of_a_kind(arr):
+    list = [x[1] for x in arr]
+
+    #we iterate through all the numbers in the list
+    for i in range(len(list) - 1, 0)
+        #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
+        if i < 2:
+            return False
+
+        #we put one as the current amount at the start of every loop to keep track of the current card
+        current_amt = 1
+
+        #get the number to check
+        target = list[i]
+
+        #to make sure that the card we selected isnt checked again we remove it from the list
+        list.pop()
+
+        #get the amount of the rank were cheching and remove the item when checed
+        while binary_search(list, target) != -1:
+            current_amt += 1
+            to_pop = binary_search(list)
+            list.pop(to_pop)
+        
+        #check if we have three or more of a kind
+        if current_amt >= 3:
+            return True
+        
+        i -= 1
+        
+
     return True
     
 def pairs_amt(arr):
+    list = [x[1] for x in arr]
+
+    #we iterate through all the numbers in the list
+    for i in range(len(list) - 1, 0)
+        #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
+        if i < 2:
+            return False
+
+        #we put one as the current amount at the start of every loop to keep track of the current card
+        current_amt = 1
+
+        #get the number to check
+        target = list[i]
+
+        #to make sure that the card we selected isnt checked again we remove it from the list
+        list.pop()
+
+        #get the amount of the rank were cheching and remove the item when checed
+        while binary_search(list, target) != -1:
+            current_amt += 1
+            to_pop = binary_search(list)
+            list.pop(to_pop)
+        
+        #check if we have three or more of a kind
+        if current_amt >= 3:
+            return True
+        
+        i -= 1
+        
     return True
 
 def highest_pair(arr):
+    list = [x[1] for x in arr]
+
+    #we iterate through all the numbers in the list
+    for i in range(len(list) - 1, 0)
+        #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
+        if i < 2:
+            return False
+
+        #we put one as the current amount at the start of every loop to keep track of the current card
+        current_amt = 1
+
+        #get the number to check
+        target = list[i]
+
+        #to make sure that the card we selected isnt checked again we remove it from the list
+        list.pop()
+
+        #get the amount of the rank were cheching and remove the item when checed
+        while binary_search(list, target) != -1:
+            current_amt += 1
+            to_pop = binary_search(list)
+            list.pop(to_pop)
+        
+        #check if we have three or more of a kind
+        if current_amt >= 3:
+            return True
+        
+        i -= 1
+        
     return True
 
 def main():
@@ -57,19 +217,19 @@ def main():
             operation = input()
             match operation:
                 case "1":
-                    all_equal(hands[hand_num])
+                    print(all_equal(hands[hand_num]))
                     break
                 case "2":
-                    shuffle(hands[hand_num])
+                    print(shuffle(hands[hand_num]))
                     break
                 case "3":
-                    three_of_a_kind(hands[hand_num])
+                    print(three_of_a_kind(hands[hand_num]))
                     break
                 case "4":
-                    pairs_amt(hands[hand_num])
+                    print(pairs_amt(hands[hand_num]))
                     break
                 case "5":
-                    highest_pair(hands[hand_num])
+                    print(highest_pair(hands[hand_num]))
                     break
                 case _:
                     print("The character you've enterenterd is not one of the options") 
