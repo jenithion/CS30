@@ -10,7 +10,6 @@ def make_hand(cards, hand_size):
     
     return hand
 
-
 def binary_search(arr, target):
     """
     Preforms Binary search on a sorted list
@@ -48,6 +47,40 @@ def binary_search(arr, target):
     #target not found
     return -1
 
+def mut_insertion_sort(arr):
+    """
+    Prefoms selection sort on a array and returns a sorted array, it is also mutable so it changes the original argument
+    
+    Args:
+        (list) arr: a list
+    
+    Example:
+        mut_selection_sort([5, 3, 8, 4, 2])
+        >>> [2, 3, 4, 5, 8]
+    """
+    
+    n = len(arr)
+    
+    #list empty edge case
+    if n <= 1:
+        return arr
+        
+    for i in range(1, n):
+        #key is the current selected element that needs to be sorted
+        key = arr[i]
+        #j is the start of the sorted part of the array
+        j = i - 1
+        
+        #shift all items in the sorted part of the array to the right(arr[current_idx++]) until the key is in the correct place
+        #we use j >= 0 to ensure that the key doesnt go past the start of the array due to python's negitive elements
+        while (j >= 0) and (key < arr[j]):
+            arr[j + 1] = arr[j]
+            j -= 1
+            
+        arr[j+1] = key
+        
+    return arr
+
 def all_equal(arr):
     """
     Checks an array of cards to check if all ranks are equal
@@ -69,7 +102,9 @@ def all_equal(arr):
         >>> True
     """
     #create the list of just the ranks
-    list = [x[1] for x in arr]
+    list = [x[0] for x in arr]
+    print(list)
+
     #get its length due to it being reused 
     LIST_LEN = len(list)
 
@@ -92,7 +127,9 @@ def shuffle(arr):
     return arr
     
 def three_of_a_kind(arr):
-    list = [x[1] for x in arr]
+    list = [x[0] for x in arr]
+    print(list)
+    mut_insertion_sort(list)
 
     #we iterate through all the numbers in the list
     for i in range(len(list) - 1, 0):
@@ -121,8 +158,7 @@ def three_of_a_kind(arr):
         
         i -= 1
         
-
-    return True
+    return False 
     
 def pairs_amt(arr):
     list = [x[1] for x in arr]
@@ -190,9 +226,9 @@ def highest_pair(arr):
 
 def main():
     #create a list of all the card to choose from
-    suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+    suits = ['♥', '♠', '♦', '♣']
     ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
-    cards = [(rank, suit) for rank in ranks for suit in suits]
+    cards = [[rank, suit] for rank in ranks for suit in suits]
 
     #create the hands
     MAX_HAND_SIZE = 13
@@ -200,7 +236,7 @@ def main():
     hand_size = lambda a: a + random.randint(MIN_HAND_SIZE, MAX_HAND_SIZE)
 
     HANDS_AMT = 4
-    hands = [[make_hand(cards, hand_size(0))] for j in range(HANDS_AMT)]
+    hands = [make_hand(cards, hand_size(0)) for j in range(HANDS_AMT)]
 
     while True:
         for i in range(HANDS_AMT):
