@@ -1,4 +1,15 @@
-import random
+import random, copy
+
+def make_hand(cards, hand_size):
+    hand = []
+    new_deck = copy.copy(cards)
+    for i in range(hand_size):
+        rand_card_num = random.randint(0, len(new_deck) - 1)
+        hand.append(new_deck[rand_card_num])
+        new_deck.pop(rand_card_num)
+    
+    return hand
+
 
 def binary_search(arr, target):
     """
@@ -76,15 +87,15 @@ def all_equal(arr):
     return True
 
 def shuffle(arr):
-    set(arr)
-    list(arr)
+    arr = set(arr)
+    arr = list(arr)
     return arr
     
 def three_of_a_kind(arr):
     list = [x[1] for x in arr]
 
     #we iterate through all the numbers in the list
-    for i in range(len(list) - 1, 0)
+    for i in range(len(list) - 1, 0):
         #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
         if i < 2:
             return False
@@ -117,7 +128,7 @@ def pairs_amt(arr):
     list = [x[1] for x in arr]
 
     #we iterate through all the numbers in the list
-    for i in range(len(list) - 1, 0)
+    for i in range(len(list) - 1, 0):
         #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
         if i < 2:
             return False
@@ -149,7 +160,7 @@ def highest_pair(arr):
     list = [x[1] for x in arr]
 
     #we iterate through all the numbers in the list
-    for i in range(len(list) - 1, 0)
+    for i in range(len(list) - 1, 0):
         #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
         if i < 2:
             return False
@@ -181,7 +192,7 @@ def main():
     #create a list of all the card to choose from
     suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
     ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
-    cards = [(suit, rank) for rank in ranks for suit in suits]
+    cards = [(rank, suit) for rank in ranks for suit in suits]
 
     #create the hands
     MAX_HAND_SIZE = 13
@@ -189,7 +200,7 @@ def main():
     hand_size = lambda a: a + random.randint(MIN_HAND_SIZE, MAX_HAND_SIZE)
 
     HANDS_AMT = 4
-    hands = [[random.choice(cards) for i in range(hand_size(0))] for j in range(HANDS_AMT)]
+    hands = [[make_hand(cards, hand_size(0))] for j in range(HANDS_AMT)]
 
     while True:
         for i in range(HANDS_AMT):
