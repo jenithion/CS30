@@ -10,42 +10,29 @@ def make_hand(cards, hand_size):
     
     return hand
 
-def binary_search(arr, target):
-    """
-    Preforms Binary search on a sorted list
-    
-    Args:
-        arr(list): a sorted list of nums
-        target(int or float): the value to search for
+def rank_to_int(arr):
+    for x in arr:
+        match x[0]:
+            case 'Ace':
+                x[0] = 1
+            case 'Jack':
+                x[0] = 11
+            case 'Queen':
+                x[0] = 12
+            case 'King':
+                x[0] = 13
 
-    Example:
-        binary_search([range(1, 10)], 6)
-        >>> 5
-        
-        binary_search([range(1, 10, 2)], 4)
-        >>> -1
-    """
-    
-    low = 0
-    high = len(arr) - 1
-    mid = 0
-    
-    i = 0
-    while low <= high:
-        mid = (high + low) // 2 #find mid point through average
-        
-        #if target is equal to the middle elemtnt
-        if arr[mid] == target:
-            return mid
-        #if target is greater, ignore left half
-        elif arr[mid] < target:
-            low = mid + 1
-        #if target is smaller, ignore right side
-        else:
-            high = mid - 1
-            
-    #target not found
-    return -1
+def int_to_rank(arr):
+    for x in arr:
+        match x[0]:
+            case 1:
+                x[0] = 'Ace'
+            case 11:
+                x[0] = 'Jack' 
+            case 12:
+                x[0] = 'Queen' 
+            case 13:
+                x[0] = 'King' 
 
 def mut_insertion_sort(arr):
     """
@@ -103,7 +90,6 @@ def all_equal(arr):
     """
     #create the list of just the ranks
     list = [x[0] for x in arr]
-    print(list)
 
     #get its length due to it being reused 
     LIST_LEN = len(list)
@@ -122,112 +108,160 @@ def all_equal(arr):
     return True
 
 def shuffle(arr):
-    arr = set(arr)
+    arr = [frozenset(x) for x in arr]
+    arr = set(arr) 
+
+    arr = [list(x) for x in arr]
     arr = list(arr)
+
+    for x in arr:
+        if type(x[0]) is string:
+            x[0], x[1] = x[1], x[0]
+
     return arr
     
 def three_of_a_kind(arr):
     list = [x[0] for x in arr]
-    print(list)
     mut_insertion_sort(list)
 
     #we iterate through all the numbers in the list
-    for i in range(len(list) - 1, 0):
+    for i in range((len(list) - 1), -1, -1):
+        current_amt = 1
+        target = list.pop()
+        i -= 1
+
         #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
-        if i < 2:
+        if len(list) < 3:
             return False
 
-        #we put one as the current amount at the start of every loop to keep track of the current card
-        current_amt = 1
+        #we can do this becuase the list is sorted im so sorry 
+        #but look O(n) time excluding the sorting algorhtm
+        if len(list) < 3:
+            first_pop = list.pop()
+            second_pop = list.pop()
+            i -= 2
+        else:
+            first_pop = list.pop()
+            second_pop = list.pop()
+            third_pop = list.pop()
+            i -= 3
 
-        #get the number to check
-        target = list[i]
-
-        #to make sure that the card we selected isnt checked again we remove it from the list
-        list.pop()
-
-        #get the amount of the rank were cheching and remove the item when checed
-        while binary_search(list, target) != -1:
-            current_amt += 1
-            to_pop = binary_search(list)
-            list.pop(to_pop)
-        
-        #check if we have three or more of a kind
-        if current_amt >= 3:
+        #for no index error
+        if  len(list) > 3:
+            if target == third_pop:
+                return False
+        elif target == second_pop:
+            i += 1
+            list.append(third_pop)
             return True
-        
-        i -= 1
+        elif target == first_pop:
+            i += 2
+            list.append(third_pop)
+            list.append(second_pop)
+        else:
+            i += 3
+            list.append(third_pop)
+            list.append(second_pop)
+            list.append(first_pop)
         
     return False 
     
 def pairs_amt(arr):
-    list = [x[1] for x in arr]
+    list = [x[0] for x in arr]
+    mut_insertion_sort(list)
 
     #we iterate through all the numbers in the list
-    for i in range(len(list) - 1, 0):
+    for i in range((len(list) - 1), -1, -1):
+        current_amt = 1
+        target = list.pop()
+        i -= 1
+
         #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
-        if i < 2:
+        if len(list) < 3:
             return False
 
-        #we put one as the current amount at the start of every loop to keep track of the current card
-        current_amt = 1
+        #we can do this becuase the list is sorted im so sorry 
+        #but look O(n) time excluding the sorting algorhtm
+        if len(list) < 3:
+            first_pop = list.pop()
+            second_pop = list.pop()
+            i -= 2
+        else:
+            first_pop = list.pop()
+            second_pop = list.pop()
+            third_pop = list.pop()
+            i -= 3
 
-        #get the number to check
-        target = list[i]
-
-        #to make sure that the card we selected isnt checked again we remove it from the list
-        list.pop()
-
-        #get the amount of the rank were cheching and remove the item when checed
-        while binary_search(list, target) != -1:
-            current_amt += 1
-            to_pop = binary_search(list)
-            list.pop(to_pop)
+        #for no index error
+        if  len(list) > 3:
+            if target == third_pop:
+                pairs_amt += 2
+        elif target == second_pop:
+            i += 1
+            list.append(third_pop)
+        elif target == first_pop:
+            i += 2
+            pairs_amt += 1
+            list.append(third_pop)
+            list.append(second_pop)
+        else:
+            i += 3
+            list.append(third_pop)
+            list.append(second_pop)
+            list.append(first_pop)
         
-        #check if we have three or more of a kind
-        if current_amt >= 3:
-            return True
-        
-        i -= 1
-        
-    return True
+    return pairs_amt 
 
 def highest_pair(arr):
-    list = [x[1] for x in arr]
+    list = [x[0] for x in arr]
+    mut_insertion_sort(list)
 
     #we iterate through all the numbers in the list
-    for i in range(len(list) - 1, 0):
+    for i in range((len(list) - 1), -1, -1):
         #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
-        if i < 2:
+        if len(list) < 3:
             return False
 
-        #we put one as the current amount at the start of every loop to keep track of the current card
         current_amt = 1
+        target = list.pop()
+        i -= 1
 
-        #get the number to check
-        target = list[i]
+        #we can do this becuase the list is sorted
+        if len(list) < 3:
+            first_pop = list.pop()
+            second_pop = list.pop()
+            i -= 2
+        else:
+            first_pop = list.pop()
+            second_pop = list.pop()
+            third_pop = list.pop()
+            i -= 3
 
-        #to make sure that the card we selected isnt checked again we remove it from the list
-        list.pop()
-
-        #get the amount of the rank were cheching and remove the item when checed
-        while binary_search(list, target) != -1:
-            current_amt += 1
-            to_pop = binary_search(list)
-            list.pop(to_pop)
-        
-        #check if we have three or more of a kind
-        if current_amt >= 3:
+        if  len(list) > 3 and target == third_pop:
+            return [target, first_pop, second_pop, third_pop]
+        elif target == second_pop:
+            i += 1
+            list.append(third_pop)
             return True
+        elif target == first_pop:
+            return [target, first_pop]
+        else:
+            i += 3
+            list.append(third_pop)
+            list.append(second_pop)
+            list.append(first_pop)
+        
+        if current_amt % 2 == 0:
+            paris_amt += 1
         
         i -= 1
         
-    return True
+    return pairs_amt 
 
 def main():
     #create a list of all the card to choose from
     suits = ['♥', '♠', '♦', '♣']
-    ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
+    ranks = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King']
     cards = [[rank, suit] for rank in ranks for suit in suits]
 
     #create the hands
@@ -239,47 +273,70 @@ def main():
     hands = [make_hand(cards, hand_size(0)) for j in range(HANDS_AMT)]
 
     while True:
-        for i in range(HANDS_AMT):
-            print(f"Hand #{i + 1}:\n{hands[i]} \n")
+        try:
+            hand_num = 0
+            while hand_num == 0: 
+                for i in range(HANDS_AMT):
+                    print(f"Hand #{i + 1}:\n{hands[i]} \n")
 
-        hand_num = 0
-        while hand_num == 0: 
-            print("which hand do you want to check")
-            hand_num = int(input())
-
-            if (hand_num > 4) or (hand_num < 1):
-                hand_num = 0
-                print("The value you've inputed is not one of the hands")
-            else:
-                hand_num -= 1
-                break
+                print("Which hand do you want to check, press 5 to remake them, or Ctrl C to exit")
+                hand_num = int(input())
                 
-        while True:
-            print("What operation do you want to do on the hand:")
-            print("   1. Check if all cards are equal")
-            print("   2. Shuffle the hand")
-            print("   3. Check for three of a kind")
-            print("   4. Count for pairs")
-            print("   5. Find the highest Pair")
-            operation = input()
-            match operation:
-                case "1":
-                    print(all_equal(hands[hand_num]))
+                if (hand_num > 5) or (hand_num < 1):
+                    hand_num = 0
+                    print("The value you've inputed is not one of the hands")
+                if hand_num == 5:
+                    hands = [make_hand(cards, hand_size(0)) for j in range(HANDS_AMT)]
+                    hand_num = 0
+                else:
+                    hand_num -= 1
                     break
-                case "2":
-                    print(shuffle(hands[hand_num]))
-                    break
-                case "3":
-                    print(three_of_a_kind(hands[hand_num]))
-                    break
-                case "4":
-                    print(pairs_amt(hands[hand_num]))
-                    break
-                case "5":
-                    print(highest_pair(hands[hand_num]))
-                    break
-                case _:
-                    print("The character you've enterenterd is not one of the options") 
+
+
+                
+            for i in range(HANDS_AMT):
+                rank_to_int(hands[i]) 
+
+            while True:
+                print("What operation do you want to do on the hand:")
+                print("   1. Check if all cards are equal")
+                print("   2. Shuffle the hand")
+                print("   3. Check for three of a kind")
+                print("   4. Count for pairs")
+                print("   5. Find the highest Pair")
+                print("   6. Go Back")
+                operation = int(input())
+                match operation:
+                    case 1:
+                        print(all_equal(hands[hand_num]))
+                        break
+                    case 2:
+                        hands[hand_num] = shuffle(hands[hand_num])
+                        print(shuffle(hands[hand_num]))
+                        break
+                    case 3:
+                        print(three_of_a_kind(hands[hand_num]))
+                        break
+                    case 4:
+                        print(pairs_amt(hands[hand_num]))
+                        break
+                    case 5:
+                        print(highest_pair(hands[hand_num]))
+                        break
+                    case 6:
+                        break
+                    case _:
+                        print("The number you've entered is not one of the options") 
+
+
+            for i in range(HANDS_AMT):
+                int_to_rank(hands[i]) 
+
+        except KeyboardInterrupt:
+            break
+
+        except ValueError:
+            print("The awnser you've typed is not a interger please try again")
 
 if __name__ == "__main__":
     main()
