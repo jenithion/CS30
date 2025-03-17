@@ -73,7 +73,7 @@ def all_equal(arr):
     Checks an array of cards to check if all ranks are equal
 
     Args:
-        (list)arr: an array of cards (suit, rank)
+        (list)arr: an array of cards (rank, suit)
 
     Return:
         True: if all cards are equal
@@ -108,6 +108,9 @@ def all_equal(arr):
     return True
 
 def shuffle(arr):
+    """
+
+    """
     arr = [frozenset(x) for x in arr]
     arr = set(arr) 
 
@@ -121,6 +124,23 @@ def shuffle(arr):
     return arr
     
 def three_of_a_kind(arr):
+    """
+    Check the array for three cards of the same kind
+
+    Args:
+        (list)arr: an array of cards(check the constant in the main file for what cards is) 
+    
+    Returns:
+        (bool): returns true if there is three of a kind else returns false
+
+    Examples:
+        print(three_of_a_kind([[3, '♥'], [9, '♦'], [3, '♣'], [2, '♦'], [3, '♠'], [6, '♠'], [3, '♦'], [6, '♦'], [4, '♠'], [7, '♦'], [10, '♦'], [10, '♥']] ))
+        >>> True 
+        
+        print(three_of_a_kind([['King', '♠'], ['Ace', '♠'], [9, '♦']]))
+        >>> False
+
+    """
     list = [x[0] for x in arr]
     mut_insertion_sort(list)
 
@@ -167,8 +187,19 @@ def three_of_a_kind(arr):
     return False 
     
 def pairs_amt(arr):
+    """
+    Check the array for the number pairs(meaning 2 % num = 0) 
+
+    Args:
+        (list)arr: an array of cards(check the constant in the main file for what cards is) 
+    Returns:
+
+    Examples:
+        print(pairs_amt())
+    """
     list = [x[0] for x in arr]
     mut_insertion_sort(list)
+    pairs_amt = 0
 
     #we iterate through all the numbers in the list
     for i in range((len(list) - 1), -1, -1):
@@ -177,8 +208,8 @@ def pairs_amt(arr):
         i -= 1
 
         #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
-        if len(list) < 3:
-            return False
+        if len(list) < 2:
+            break
 
         #we can do this becuase the list is sorted im so sorry 
         #but look O(n) time excluding the sorting algorhtm
@@ -213,14 +244,25 @@ def pairs_amt(arr):
     return pairs_amt 
 
 def highest_pair(arr):
+    """
+    Check the array for the highest number pair('s)(meaning 2 % num = 0) 
+
+    Args:
+        (list)arr: an array of cards(check the constant in the main file for what cards is) 
+
+    Returns:
+
+
+    Examples:
+    """
     list = [x[0] for x in arr]
     mut_insertion_sort(list)
 
     #we iterate through all the numbers in the list
     for i in range((len(list) - 1), -1, -1):
-        #if the function hasnt returned true and the amt of items in the list is less than 3 it cant be true
-        if len(list) < 3:
-            return False
+        #if the function hasnt returned true and the amt of items in the list is less than 2 it cant be true
+        if len(list) < 2:
+            break
 
         current_amt = 1
         target = list.pop()
@@ -237,12 +279,12 @@ def highest_pair(arr):
             third_pop = list.pop()
             i -= 3
 
-        if  len(list) > 3 and target == third_pop:
-            return [target, first_pop, second_pop, third_pop]
+        if  len(list) > 3:
+            if target == third_pop:
+                return [target, first_pop, second_pop, third_pop]
         elif target == second_pop:
             i += 1
             list.append(third_pop)
-            return True
         elif target == first_pop:
             return [target, first_pop]
         else:
@@ -251,26 +293,25 @@ def highest_pair(arr):
             list.append(second_pop)
             list.append(first_pop)
         
-        if current_amt % 2 == 0:
-            paris_amt += 1
-        
-        i -= 1
-        
-    return pairs_amt 
+    return "There are no pairs in this hand" 
 
 def main():
+    """
+    
+    """
     #create a list of all the card to choose from
-    suits = ['♥', '♠', '♦', '♣']
-    ranks = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King']
-    cards = [[rank, suit] for rank in ranks for suit in suits]
+    SUITS = ['♥', '♠', '♦', '♣']
+    RANKS = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King']
+    CARDS = [[rank, suit] for rank in RANKS for suit in SUITS]
 
     #create the hands
     MAX_HAND_SIZE = 13
     MIN_HAND_SIZE = 1
-    hand_size = lambda a: a + random.randint(MIN_HAND_SIZE, MAX_HAND_SIZE)
+    HAND_SIZE = lambda a: a + random.randint(MIN_HAND_SIZE, MAX_HAND_SIZE)
 
     HANDS_AMT = 4
-    hands = [make_hand(cards, hand_size(0)) for j in range(HANDS_AMT)]
+    RUN_FUNCTION = 0
+    hands = [make_hand(CARDS, HAND_SIZE(RUN_FUNCTION)) for j in range(HANDS_AMT)]
 
     while True:
         try:
@@ -286,14 +327,12 @@ def main():
                     hand_num = 0
                     print("The value you've inputed is not one of the hands")
                 if hand_num == 5:
-                    hands = [make_hand(cards, hand_size(0)) for j in range(HANDS_AMT)]
+                    hands = [make_hand(CARDS, HAND_SIZE(RUN_FUNCTION)) for j in range(HANDS_AMT)]
                     hand_num = 0
                 else:
                     hand_num -= 1
                     break
 
-
-                
             for i in range(HANDS_AMT):
                 rank_to_int(hands[i]) 
 
@@ -328,11 +367,11 @@ def main():
                     case _:
                         print("The number you've entered is not one of the options") 
 
-
             for i in range(HANDS_AMT):
                 int_to_rank(hands[i]) 
 
         except KeyboardInterrupt:
+            print("\n")
             break
 
         except ValueError:
