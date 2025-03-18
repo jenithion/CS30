@@ -45,6 +45,8 @@ def rank_to_int(arr):
         (list)arr: a list of cards with string representations for (Ace, Jack, Queen, King)
 
     Examples:
+        print(rank_to_int([[2, '♠'], [3, '♦'], [9, '♦'], ['King', '♠'], [9, '♣'], [5, '♠'], [10, '♥'], [6, '♥'], [9, '♥']]))
+        >>> [[2, '♠'], [3, '♦'], [9, '♦'], [13, '♠'], [9, '♣'], [5, '♠'], [10, '♥'], [6, '♥'], [9, '♥']]
     """
     RANK_OF_CARD = 0
 
@@ -72,24 +74,27 @@ def int_to_rank(arr):
         (list)arr: a list of cards with interger representations for (Ace, Jack, Queen, King)
 
     Examples:
-
+        print(int_to_rank([[2, '♠'], [3, '♦'], [9, '♦'], [13, '♠'], [9, '♣'], [5, '♠'], [10, '♥'], [6, '♥'], [9, '♥']]))
+        >>> [[2, '♠'], [3, '♦'], [9, '♦'], ['King', '♠'], [9, '♣'], [5, '♠'], [10, '♥'], [6, '♥'], [9, '♥']]
     """
     RANK_OF_CARD = 0
 
-    ACE = 1
-    JACK = 11
-    QUEEN = 12
-    KING = 13
+    #switchcases are just wierd
+    class constant():
+        ACE = 1
+        JACK = 11
+        QUEEN = 12
+        KING = 13
 
     for x in arr:
         match x[RANK_OF_CARD]:
-            case ACE:
+            case constant.ACE:
                 x[RANK_OF_CARD] = 'Ace'
-            case JACK:
+            case constant.JACK:
                 x[RANK_OF_CARD] = 'Jack' 
-            case QUEEN:
+            case constant.QUEEN:
                 x[RANK_OF_CARD] = 'Queen' 
-            case KING:
+            case constant.KING:
                 x[RANK_OF_CARD] = 'King' 
 
 def mut_insertion_sort(arr):
@@ -142,12 +147,13 @@ def all_equal(arr):
         print(all_equal(card_list))
         >>> False
 
-        card_list = [('Hearts', '3') , ('Clubs', '3'), ('Diamonds', '5')]
+        card_list = [('Hearts', '3') , ('Clubs', '3'), ('Diamonds', '3')]
         print(all_equal(card_list))
         >>> True
     """
+    RANK_OF_CARD = 0
     #create the list of just the ranks
-    list = [x[0] for x in arr]
+    list = [x[RANK_OF_CARD] for x in arr]
 
     #get its length due to it being reused 
     LIST_LEN = len(list)
@@ -180,7 +186,15 @@ def shuffle(arr):
         (list): a "shuffled" array of the given cards
         
     Examples:
+        print(shuffle([[5, '♦'], [4, '♣'], ['Queen', '♦'], ['Ace', '♥'], [9, '♠'], [8, '♠'], [6, '♦'], [4, '♥'], [2, '♦'], [5, '♠'], [4, '♠']]))
+        >>> [[5, '♦'], [4, '♣'], ['Queen', '♦'], ['Ace', '♥'], [9, '♠'], [8, '♠'], [6, '♦'], [4, '♥'], [2, '♦'], [5, '♠'], [4, '♠']]
+
+        print(shuffle([[8, '♥'], [9, '♠'], [10, '♠'], [4, '♥'], ['Queen', '♣'], [2, '♦'], [5, '♠'], [10, '♣']]))
+        >>> [['Queen', '♣'], [2, '♦'], [4, '♥'], [10, '♠'], [5, '♠'], [10, '♣'], [9, '♠'], [8, '♥']]
     """
+    RANK_OF_CARD = 0
+    SUIT_OF_CARD = 1
+
     #change all the items in the array to immutible
     arr = [frozenset(x) for x in arr]
     #sets are unordered and therefore if arr is changed into a set it will "shuffle" it
@@ -195,8 +209,8 @@ def shuffle(arr):
     for x in arr:
         #due to the suit always being a string, and the rank of the card being changed to intergers before this function is called
         #we can find if the rank and suit has been swaped in the process of changeing the items inside the list to immutible
-        if type(x[0]) is string:
-            x[0], x[1] = x[1], x[0]
+        if type(x[RANK_OF_CARD]) is str:
+            x[RANK_OF_CARD], x[SUIT_OF_CARD] = x[SUIT_OF_CARD], x[RANK_OF_CARD]
 
     return arr
     
@@ -227,7 +241,6 @@ def three_of_a_kind(arr):
     THREE_REMOVED_OFFSET = 3
     TWO_REMOVED_OFFSET = 2
     ONE_REMOVED_OFFSET = 1
-    INDEX_ERROR_PLACEHOLDER = 0
     THERE_IS_THIRD_POP = 3
     READD_SECOND_POPS_OFFSET = 2
     READD_ALL_POPS_OFFSET = 3
@@ -254,7 +267,6 @@ def three_of_a_kind(arr):
         else:
             first_pop = list.pop()
             second_pop = list.pop()
-            third_pop = INDEX_ERROR_PLACEHOLDER
             i -= TWO_REMOVED_OFFSET 
 
         #for no index error
@@ -291,7 +303,6 @@ def pairs_amt(arr):
     THREE_REMOVED_OFFSET = 3
     TWO_REMOVED_OFFSET = 2
     ONE_REMOVED_OFFSET = 1
-    INDEX_ERROR_PLACEHOLDER = 0
     THERE_IS_THIRD_POP = 3
     THERE_IS_SECOND_POP = 2
     READD_THIRD_POP_OFFSET = 1
@@ -299,16 +310,17 @@ def pairs_amt(arr):
     READD_ALL_POPS_OFFSET = 3
     CANNOT_MAKE_PAIR = 2
     NO_INDEX_ERROR_POP_THREE = 3
-    NO_INDEX_ERROR_POP_TWO = 2
+    INDEX_ERROR_POP_TWO = 2
     ONE_PAIR = 1
     TWO_PAIR = 2
-    LIST_INDEX_LENGTH = len(list) - 1
     LIST_INDEX_MIN = 0
     ITERATE_BACKWARD = -1
-    HAND_NOT_CHECKED
+    HAND_NOT_CHECKED = 0
 
     #create a list of only the ranks of all the cards
     list = [x[RANK_OF_CARD] for x in arr]
+
+    LIST_INDEX_LENGTH = len(list) - 1
     #sort the cards, was originally so i could use binary sort, but i found something faster
     mut_insertion_sort(list)
     #set the ammount of pairs to 0, because none of the hand has been checked yet
@@ -335,18 +347,15 @@ def pairs_amt(arr):
             i -= THREE_REMOVED_OFFSET 
 
         #this part ensure that we get no errors when there are only 2 items left in the list
-        elif len(list) > NO_INDEX_ERROR_POP_TWO:
+        elif len(list) > INDEX_ERROR_POP_TWO:
             first_pop = list.pop() #the item before the current target
             second_pop = list.pop() #the item behind the target by 2  
-            third_pop = INDEX_ERROR_PLACEHOLDER #we cant pop another item or else there will be  an index error
             #offset the iterattion of the for loop due to the length of the list being changed
             i -= TWO_REMOVED_OFFSET 
         
         #this part ensure that we get no errors when there are only 1 item left in the list
         else:
             first_pop = list.pop() #the item before the current target
-            second_pop = INDEX_ERROR_PLACEHOLDER #the item behind the target by 2  
-            third_pop = INDEX_ERROR_PLACEHOLDER #we cant pop another item or else there will be  an index error
             #offset the iterattion of the for loop due to the length of the list being changed
             i -= ONE_REMOVED_OFFSET 
 
@@ -356,34 +365,50 @@ def pairs_amt(arr):
                 #change the ammout of pairs, due to the target being equal to the third pop(the item three behind it in the list) 
                 #and due to the list being sorted, when third pop is equal to the target there would be four of the item 
                 pairs_amt += TWO_PAIR 
+            elif target == second_pop:
+                #ensure that the items with a different value are readded to the list
+                list.append(third_pop)
+                #offset the iterattion of the for loop due to the length of the list being changed
+                i += READD_THIRD_POP_OFFSET 
+            elif target == first_pop:
+                pairs_amt += ONE_PAIR 
+                #ensure that the items with a different value are readded to the list
+                list.append(third_pop)
+                list.append(second_pop)
+                #offset the iterattion of the for loop due to the length of the list being changed
+                i += READD_SECOND_POPS_OFFSET 
+            else:
+                #readd all the removed items into to the list due to them all being different to the target
+                list.append(third_pop)
+                list.append(second_pop)
+                list.append(first_pop)
+                #offset the iterattion of the for loop due to the length of the list being changed
+                i += READD_ALL_POPS_OFFSET
 
         #this check ensure we dont check the third pop when there have been no changes to it because the list is too short
         elif len(list) > THERE_IS_SECOND_POP:
         #if there are two or three items that are identical to the target(target == second_pop || target == first_pop)
         #the ammount of pairs will go up, while we readd the unidentical items back into the list
-
-            if target == second_pop:
+            if target == first_pop:
                 pairs_amt += ONE_PAIR 
                 #ensure that the items with a different value are readded to the list
-                list.append(third_pop)
+                list.append(second_pop)
                 #offset the iterattion of the for loop due to the length of the list being changed
-                i += READD_THIRD_POP_OFFSET 
-        elif target == first_pop:
-            pairs_amt += ONE_PAIR 
-            #ensure that the items with a different value are readded to the list
-            list.append(third_pop)
-            list.append(second_pop)
-            #offset the iterattion of the for loop due to the length of the list being changed
-            i += READD_SECOND_POPS_OFFSET 
+                i += READD_THIRD_POPS_OFFSET 
 
-        #case where there are no equal items to the current target 
+            #case where there are no equal items to the current target 
+            else:
+                #readd all the removed items into to the list due to them all being different to the target
+                list.append(second_pop)
+                list.append(first_pop)
+                #offset the iterattion of the for loop due to the length of the list being changed
+                i += READD_SECOND_POPS_OFFSET
+            
         else:
-            #readd all the removed items into to the list due to them all being different to the target
-            list.append(third_pop)
-            list.append(second_pop)
             list.append(first_pop)
-            #offset the iterattion of the for loop due to the length of the list being changed
-            i += READD_ALL_POPS_OFFSET
+            i += READD_THIRD_POP_OFFSET
+        
+        print(list)
         
     return pairs_amt 
 
@@ -411,14 +436,13 @@ def highest_pair(arr):
     THREE_REMOVED_OFFSET = 3
     TWO_REMOVED_OFFSET = 2
     ONE_REMOVED_OFFSET = 1
-    INDEX_ERROR_PLACEHOLDER = 0
     THERE_IS_THIRD_POP = 3
     THERE_IS_SECOND_POP = 2
     READD_THIRD_POP_OFFSET = 1
     READD_ALL_POPS_OFFSET = 3
     CANNOT_MAKE_PAIR = 2
     NO_INDEX_ERROR_POP_THREE = 3
-    NO_INDEX_ERROR_POP_TWO = 2
+    INDEX_ERROR_POP_TWO = 2
 
     #iterate through all the cards in the list backwards due to .pop() and .append() being o(1) meanwhile .append(n) and .pop(n) being o(n)
     #this makes more sence later
@@ -442,18 +466,15 @@ def highest_pair(arr):
             i -= THREE_REMOVED_OFFSET
 
         #this part ensure that we get no errors when there are only 2 items left in the list
-        elif len(list) > NO_INDEX_ERROR_POP_TWO:
+        elif len(list) > INDEX_ERROR_POP_TWO:
             first_pop = list.pop() #the item before the current target
             second_pop = list.pop() #the item behind the target by 2  
-            third_pop = INDEX_ERROR_PLACEHOLDER #we cant pop another item or else there will be  an index error
             #offset the iterattion of the for loop due to the length of the list being changed
             i -= TWO_REMOVED_OFFSET 
         
         #this part ensure that we get no errors when there are only 1 item left in the list
         else:
             first_pop = list.pop() #the item before the current target
-            second_pop = INDEX_ERROR_PLACEHOLDER #we cant pop another item or else there will be  an index error  
-            third_pop = INDEX_ERROR_PLACEHOLDER #we cant pop another item or else there will be  an index error
             #offset the iterattion of the for loop due to the length of the list being changed
             i -= ONE_REMOVED_OFFSET 
 
@@ -490,6 +511,7 @@ def highest_pair(arr):
     return "There are no pairs in this hand" 
 
 def test_cases():
+
     return True
 
 def main():
@@ -497,6 +519,8 @@ def main():
     what are you even supposed to put for the main docstring like
     'it runs the code......' lol
     """
+    test_cases()
+
     #create the suits that cards can be
     SUITS = ['♥', '♠', '♦', '♣']
     #create the rank that the card can be
@@ -515,11 +539,14 @@ def main():
     #we make a hand for the amount of times we should make a hand and put that in an array
     hands = [make_hand(CARDS, HAND_SIZE(RUN_HANDS_FUNCTION)) for j in range(HANDS_AMT)]
 
-    OP_ALL_EQUAL = 1
-    OP_SHUFFLE = 2
-    OP_THREE_OF_A_KIND = 3
-    OP_PAIRS_AMT = 4
-    OP_HIGHEST_PAIR = 5
+    #i just use this for the switch cases or else they dont work dont worry i wont use object oriented
+    class constant():
+        OP_ALL_EQUAL = 1
+        OP_SHUFFLE = 2
+        OP_THREE_OF_A_KIND = 3
+        OP_PAIRS_AMT = 4
+        OP_HIGHEST_PAIR = 5
+
     OP_GO_BACK = 6
     OP_REROLL = 5
     FIX_INDEX = 1
@@ -558,12 +585,10 @@ def main():
                 else:
                     #change the number the user has chose to what its index would be in the array
                     hand_num -= FIX_INDEX 
+                    rank_to_int(hands[hand_num])
                     #exit the loop because the user has chosen as valid hand
                     break
 
-            #change all the ranks in the hands into their interger varient
-            for i in range(HANDS_AMT):
-                rank_to_int(hands[i]) 
 
             while True:
                 #idk if i have to say but
@@ -576,47 +601,56 @@ def main():
                 print("   5. Find the highest Pair")
                 print("   6. Go Back")
                 operation = int(input()) #gets what operation that the user wants to do
+                print("\n")
 
                 #unless you dont know, this is pythons switch bc they just have to be special
                 match operation:
 
-                    #for where i get all the numbers that each function matches too look like idk 5 lines up and look what function it is
-                    case OP_ALL_EQUAL:
+                    #have to type cast all to int or else a swich case wouldn't work because of a valueError
+                    case constant.OP_ALL_EQUAL:
                         #prints the output of all_equal for the chozen hand
                         print(all_equal(hands[hand_num]))
+                        #change all the ranks in the hands into their string varient if they have one
+                        int_to_rank(hands[hand_num])
                         break
-                    case OP_SHUFFLE:
+                    case constant.OP_SHUFFLE:
                         #idk why but the function is immutible so we have to ensure that the hand is equal to its reshuffled state
                         hands[hand_num] = shuffle(hands[hand_num])
                         #prints the output of shuffle for the chozen hand
                         print(shuffle(hands[hand_num]))
+                        #change all the ranks in the hands into their string varient if they have one
+                        int_to_rank(hands[hand_num])
                         break
-                    case OP_THREE_OF_A_KIND:
+                    case constant.OP_THREE_OF_A_KIND:
                         #prints the output of shuffle for the chozen hand
                         print(three_of_a_kind(hands[hand_num]))
+                        #change all the ranks in the hands into their string varient if they have one
+                        int_to_rank(hands[hand_num])
                         break
-                    case OP_PAIRS_AMT:
+                    case constant.OP_PAIRS_AMT:
                         #prints the output of shuffle for the chozen hand
                         print(pairs_amt(hands[hand_num]))
+                        #change all the ranks in the hands into their string varient if they have one
+                        int_to_rank(hands[hand_num])
                         break
-                    case OP_HIGHEST_PAIR:
+                    case constant.OP_HIGHEST_PAIR:
                         #prints the output of shuffle for the chozen hand
                         print(highest_pair(hands[hand_num]))
+                        #change all the ranks in the hands into their string varient if they have one
+                        int_to_rank(hands[hand_num])
                         break
-                    case OP_GO_BACK:
+                    case constant.OP_GO_BACK:
                         #go back because the user messed up or something and chose the wrong hand
+                        #change all the ranks in the hands into their string varient if they have one
+                        int_to_rank(hands[hand_num])
                         break
                     case _:
                         #make sure that the user has chosen a valid operation
                         print("The number you've entered is not one of the options") 
 
-            #change all the ranks in the hands into their string varient if they have one
-            for i in range(HANDS_AMT):
-                int_to_rank(hands[i]) 
 
         #makes the exiting of the program look cleaner
         except KeyboardInterrupt:
-            print("\n")
             break
 
         #make sure that the user inputs an interger when they input something
