@@ -233,9 +233,6 @@ def three_of_a_kind(arr):
 
     """
     RANK_OF_CARD = 0
-    list = [x[RANK_OF_CARD] for x in arr]
-    mut_insertion_sort(list)
-
     CANNOT_MAKE_THREE = 3
     NO_INDEX_ERROR_POP_THREE = 3
     THREE_REMOVED_OFFSET = 3
@@ -244,12 +241,16 @@ def three_of_a_kind(arr):
     THERE_IS_THIRD_POP = 3
     READD_SECOND_POPS_OFFSET = 2
     READD_ALL_POPS_OFFSET = 3
+    INDEX_ERROR_PLACEHOLDER = 0
+    list = [x[RANK_OF_CARD] for x in arr]
+    mut_insertion_sort(list)
 
     #we iterate through all the numbers in the list
     LIST_INDEX_LENGTH = len(list) - 1
     LIST_INDEX_MIN = 0
     ITERATE_BACKWARD = -1
-    for i in range(LIST_INDEX_LENGTH, LIST_INDEX_MIN - 1, ITERATE_BACKWARD):
+    INCLUSIVE_OFFSET = 1
+    for i in range(LIST_INDEX_LENGTH, LIST_INDEX_MIN - INCLUSIVE_OFFSET, ITERATE_BACKWARD):
         target = list.pop()
         i -= ONE_REMOVED_OFFSET 
 
@@ -267,23 +268,34 @@ def three_of_a_kind(arr):
         else:
             first_pop = list.pop()
             second_pop = list.pop()
+            third_pop = INDEX_ERROR_PLACEHOLDER 
             i -= TWO_REMOVED_OFFSET 
 
         #for no index error
-        if  len(list) > THERE_IS_THIRD_POP:
+        if  third_pop != INDEX_ERROR_PLACEHOLDER:
             if target == third_pop:
                 return False
-        elif target == second_pop:
-            return True
-        elif target == first_pop:
-            list.append(third_pop)
-            list.append(second_pop)
-            i += READD_SECOND_POPS_OFFSET
+            elif target == second_pop:
+                return True
+            elif target == first_pop:
+                list.append(third_pop)
+                list.append(second_pop)
+                i += READD_SECOND_POPS_OFFSET
+            else:
+                list.append(third_pop)
+                list.append(second_pop)
+                list.append(first_pop)
+                i += READD_ALL_POPS_OFFSET
         else:
-            list.append(third_pop)
-            list.append(second_pop)
-            list.append(first_pop)
-            i += READD_ALL_POPS_OFFSET
+            if target == second_pop:
+                return True
+            elif target == first_pop:
+                list.append(second_pop)
+                i += READD_SECOND_POPS_OFFSET - ONE_REMOVED_OFFSET
+            else:
+                list.append(second_pop)
+                list.append(first_pop)
+                i += READD_ALL_POPS_OFFSET - ONE_REMOVED_OFFSET
         
     return False 
     
@@ -313,14 +325,12 @@ def pairs_amt(arr):
     INDEX_ERROR_POP_TWO = 2
     ONE_PAIR = 1
     TWO_PAIR = 2
-    LIST_INDEX_MIN = 0
-    ITERATE_BACKWARD = -1
     HAND_NOT_CHECKED = 0
+    INDEX_ERROR_PLACEHOLDER = 0
 
     #create a list of only the ranks of all the cards
     list = [x[RANK_OF_CARD] for x in arr]
 
-    LIST_INDEX_LENGTH = len(list) - 1
     #sort the cards, was originally so i could use binary sort, but i found something faster
     mut_insertion_sort(list)
     #set the ammount of pairs to 0, because none of the hand has been checked yet
@@ -328,7 +338,11 @@ def pairs_amt(arr):
 
     #iterate through all the cards in the list backwards due to .pop() and .append() being o(1) meanwhile .append(n) and .pop(n) being o(n)
     #this makes more sence later
-    for i in range(LIST_INDEX_LENGTH, LIST_INDEX_MIN - 1, ITERATE_BACKWARD):
+    LIST_INDEX_LENGTH = len(list) - 1
+    ITERATE_BACKWARD = -1
+    INCLUSIVE_OFFSET = 1
+    LIST_INDEX_MIN = 0
+    for i in range(LIST_INDEX_LENGTH, LIST_INDEX_MIN - INCLUSIVE_OFFSET, ITERATE_BACKWARD):
         target = list.pop()
         i -= ONE_REMOVED_OFFSET 
 
@@ -350,17 +364,20 @@ def pairs_amt(arr):
         elif len(list) > INDEX_ERROR_POP_TWO:
             first_pop = list.pop() #the item before the current target
             second_pop = list.pop() #the item behind the target by 2  
+            third_pop = INDEX_ERROR_PLACEHOLDER
             #offset the iterattion of the for loop due to the length of the list being changed
             i -= TWO_REMOVED_OFFSET 
         
         #this part ensure that we get no errors when there are only 1 item left in the list
         else:
             first_pop = list.pop() #the item before the current target
+            second_pop = INDEX_ERROR_PLACEHOLDER #the item behind the target by 2  
+            third_pop = INDEX_ERROR_PLACEHOLDER
             #offset the iterattion of the for loop due to the length of the list being changed
             i -= ONE_REMOVED_OFFSET 
 
         #this check ensure we dont check the third pop when there have been no changes to it because the list is too short
-        if  len(list) > THERE_IS_THIRD_POP:
+        if  third_pop != INDEX_ERROR_PLACEHOLDER:
             if target == third_pop:
                 #change the ammout of pairs, due to the target being equal to the third pop(the item three behind it in the list) 
                 #and due to the list being sorted, when third pop is equal to the target there would be four of the item 
@@ -386,7 +403,7 @@ def pairs_amt(arr):
                 i += READD_ALL_POPS_OFFSET
 
         #this check ensure we dont check the third pop when there have been no changes to it because the list is too short
-        elif len(list) > THERE_IS_SECOND_POP:
+        elif second_pop != INDEX_ERROR_PLACEHOLDER:
         #if there are two or three items that are identical to the target(target == second_pop || target == first_pop)
         #the ammount of pairs will go up, while we readd the unidentical items back into the list
             if target == first_pop:
@@ -394,7 +411,7 @@ def pairs_amt(arr):
                 #ensure that the items with a different value are readded to the list
                 list.append(second_pop)
                 #offset the iterattion of the for loop due to the length of the list being changed
-                i += READD_THIRD_POPS_OFFSET 
+                i += READD_SECOND_POPS_OFFSET  - ONE_REMOVED_OFFSET 
 
             #case where there are no equal items to the current target 
             else:
@@ -402,11 +419,14 @@ def pairs_amt(arr):
                 list.append(second_pop)
                 list.append(first_pop)
                 #offset the iterattion of the for loop due to the length of the list being changed
-                i += READD_SECOND_POPS_OFFSET
+                i += READD_ALL_POPS_OFFSET - ONE_REMOVED_OFFSET 
             
         else:
-            list.append(first_pop)
-            i += READD_THIRD_POP_OFFSET
+            if target == first_pop:
+                pairs_amt += ONE_PAIR
+            else:
+                list.append(first_pop)
+                i += READD_SECOND_POPS_OFFSET - TWO_REMOVED_OFFSET 
         
         print(list)
         
@@ -443,10 +463,14 @@ def highest_pair(arr):
     CANNOT_MAKE_PAIR = 2
     NO_INDEX_ERROR_POP_THREE = 3
     INDEX_ERROR_POP_TWO = 2
+    INDEX_ERROR_PLACEHOLDER = 0
 
     #iterate through all the cards in the list backwards due to .pop() and .append() being o(1) meanwhile .append(n) and .pop(n) being o(n)
     #this makes more sence later
-    for i in range((len(list) - 1), -1, -1):
+    LIST_INDEX_LENGTH = len(list) - 1
+    ITERATE_BACKWARD = -1
+    LIST_INDEX_MIN = 0
+    for i in range(LIST_INDEX_LENGTH, LIST_INDEX_MIN - 1, ITERATE_BACKWARD):
         target = list.pop()
         i -= ONE_REMOVED_OFFSET 
 
@@ -469,12 +493,15 @@ def highest_pair(arr):
         elif len(list) > INDEX_ERROR_POP_TWO:
             first_pop = list.pop() #the item before the current target
             second_pop = list.pop() #the item behind the target by 2  
+            third_pop = INDEX_ERROR_PLACEHOLDER
             #offset the iterattion of the for loop due to the length of the list being changed
             i -= TWO_REMOVED_OFFSET 
         
         #this part ensure that we get no errors when there are only 1 item left in the list
         else:
             first_pop = list.pop() #the item before the current target
+            second_pop = INDEX_ERROR_PLACEHOLDER #the item behind the target by 2  
+            third_pop = INDEX_ERROR_PLACEHOLDER
             #offset the iterattion of the for loop due to the length of the list being changed
             i -= ONE_REMOVED_OFFSET 
 
@@ -482,29 +509,44 @@ def highest_pair(arr):
         #due to us iterating through the list backwards the first pair, or quad it finds will be the highest pair
         #this check ensure we dont check the third pop when there have been no changes to it because the list is too short
 
-        if  len(list) > THERE_IS_THIRD_POP:
+        #this check ensure we dont check the third pop when there have been no changes to it because the list is too short
+        if  third_pop != INDEX_ERROR_PLACEHOLDER:
             if target == third_pop:
-                #return the quad that was found
                 return [target, first_pop, second_pop, third_pop]
-        #this check ensure we dont check the second pop when there have been no changes to it because the list is too short
-        elif len(list) > THERE_IS_SECOND_POP:
-            if target == second_pop:
+            elif target == second_pop:
                 #ensure that the items with a different value are readded to the list
                 list.append(third_pop)
                 #offset the iterattion of the for loop due to the length of the list being changed
-                i += READD_THIRD_POP_OFFSET
-        #check the previous item to the current target for a pair
-        elif target == first_pop:
-            #we dont need to reappend anything due to the return exiting the function
-            #return the pair that was found
-            return [target, first_pop]
+                i += READD_THIRD_POP_OFFSET 
+            elif target == first_pop:
+                return [target, first_pop]
+            else:
+                #readd all the removed items into to the list due to them all being different to the target
+                list.append(third_pop)
+                list.append(second_pop)
+                list.append(first_pop)
+                #offset the iterattion of the for loop due to the length of the list being changed
+                i += READD_ALL_POPS_OFFSET
+
+        #this check ensure we dont check the third pop when there have been no changes to it because the list is too short
+        elif second_pop != INDEX_ERROR_PLACEHOLDER:
+        #if there are two or three items that are identical to the target(target == second_pop || target == first_pop)
+        #the ammount of pairs will go up, while we readd the unidentical items back into the list
+            elif target == first_pop:
+                return [target, first_pop]
+            #case where there are no equal items to the current target 
+            else:
+                #readd all the removed items into to the list due to them all being different to the target
+                list.append(second_pop)
+                list.append(first_pop)
+                #offset the iterattion of the for loop due to the length of the list being changed
+                i += READD_ALL_POPS_OFFSET - ONE_REMOVED_OFFSET 
+            
         else:
-            #ensure that the items with a different value are readded to the list
-            list.append(third_pop)
-            list.append(second_pop)
-            list.append(first_pop)
-            #offset the iterattion of the for loop due to the length of the list being changed
-            i += READD_ALL_POPS_OFFSET 
+            if target == first_pop:
+                return [target, first_pop]
+            else: 
+                list.append(second_pop)
         
     #if no pair has been found yet then 
     #                     ↓
