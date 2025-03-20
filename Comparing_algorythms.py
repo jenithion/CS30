@@ -15,6 +15,7 @@ def get_time_elapsed(function, list, target=None):
 
         ans = end - start
         return ans
+
 def gen_random_ints(length, min_val, max_val):
     arr = []
     for i in range(length):
@@ -222,17 +223,15 @@ def main():
     for reapat in range(REPEAT_AMT):
         random_list = gen_random_ints(LIST_LENGTH, RANDOM_MIN_VAL, RANDOM_MAX_VAL)
 
+        random_target = random.randint(TARGET_MIN, LIST_LENGTH - FIX_INDEX)
+        random_list.sort()
+        linear_search_times.append( get_time_elapsed( linear_search, random_list, random_list[random_target] ) )
+        binary_search_times.append( get_time_elapsed( binary_search, random_list, random_list[random_target] ) )
+
         bubble_sort_times.append( get_time_elapsed( bubble_sort, random_list ) )
         selection_sort_times.append( get_time_elapsed( selection_sort, random_list ) )
         insertion_sort_times.append( get_time_elapsed( insertion_sort, random_list ) )
         
-        # random_target = random.randint(TARGET_MIN, LIST_LENGTH - FIX_INDEX)
-        # random_list.sort()
-        # linear_search_times.append( get_time_elapsed( linear_search, random_list, random_list[random_target] ) )
-        # binary_search_times.append( get_time_elapsed( binary_search, random_list, random_list[random_target] ) )
-  
-
-    
     linear_search_avg = average(linear_search_times) 
     binary_search_avg = average(binary_search_times)
     bubble_sort_avg = average(bubble_sort)
