@@ -12,6 +12,11 @@ def make_hand(cards, hand_size):
         (list): return a list of cards from a new "deck"
 
     Examples:
+        print(make_hand(CARDS, 8))
+        >>> [[2, '♠'], [5, '♣'], [8, '♥'], ['Jack', '♥'], [5, '♥'], ['Queen', '♥'], [5, '♦'], [7, '♥'], [6, '♥'], ['Ace', '♠']]
+
+        print(make_hand(CARDS, 2))
+        >>> [[9, '♥'], [3, '♦']]
 
     """
     hand = []
@@ -132,11 +137,11 @@ def all_equal(arr):
         False: if cards arent all equal
 
     Example:
-        card_list = [('Hearts', '4'), ('Spades', '6'), ('Spades', '3'), ('Clubs', '6'), ('Spades', '6'), ('Diamonds', '10'), ('Clubs', '10'), ('Hearts', '5')]
+        card_list = [('♥', 4), ('♠', 6), ('♠', 3), ('♣', 6), ('♣', 6), ('♦', 10), ('♣', 10), ('♥', 5)]
         print(all_equal(card_list))
         >>> False
 
-        card_list = [('Hearts', '3') , ('Clubs', '3'), ('Diamonds', '3')]
+        card_list = [('♥', 3) , ('♣', 3), ('♦', 3)]
         print(all_equal(card_list))
         >>> True
     """
@@ -226,11 +231,11 @@ def three_of_a_kind(arr):
     ITERATE_BACKWARD = -1
     INCLUSIVE_OFFSET = 1
     for i in range(LIST_INDEX_LENGTH, LIST_INDEX_MIN - INCLUSIVE_OFFSET, ITERATE_BACKWARD):
-        target = list.pop()
-        i -= ONE_REMOVED_OFFSET 
-
         if len(list) < CANNOT_MAKE_THREE:
             return False
+
+        target = list.pop()
+        i -= ONE_REMOVED_OFFSET 
 
         if len(list) > NO_INDEX_ERROR_POP_THREE:
             first_pop = list.pop()
@@ -280,7 +285,11 @@ def pairs_amt(arr):
         (int): will return the ammount of pairs in the hand
 
     Examples:
-        print(pairs_amt())
+        print( pairs_amt([[2, '♠'], [5, '♣'], [8, '♥'], [11, '♥'], [5, '♥'], [12, '♥'], [5, '♦'], [7, '♥'], [6, '♥'], [1, '♠']]) )
+        >>> 0 
+
+        print( pairs_amt([[11, '♣'], [8, '♠'], [13, '♣'], [10, '♦'], [8, '♣'], [13, '♦']]) )
+        >>> 2
     """
     RANK_OF_CARD = 0
     THREE_REMOVED_OFFSET = 3
@@ -309,11 +318,11 @@ def pairs_amt(arr):
     INCLUSIVE_OFFSET = 1
     LIST_INDEX_MIN = 0
     for i in range(LIST_INDEX_LENGTH, LIST_INDEX_MIN - INCLUSIVE_OFFSET, ITERATE_BACKWARD):
-        target = list.pop()
-        i -= ONE_REMOVED_OFFSET 
-
         if len(list) < CANNOT_MAKE_PAIR:
             break
+
+        target = list.pop()
+        i -= ONE_REMOVED_OFFSET 
 
         if len(list) > NO_INDEX_ERROR_POP_THREE:
             first_pop = list.pop() 
@@ -368,7 +377,6 @@ def pairs_amt(arr):
                 list.append(first_pop)
                 i += READD_SECOND_POPS_OFFSET - TWO_REMOVED_OFFSET 
         
-        print(list)
         
     return pairs_amt 
 
@@ -385,6 +393,14 @@ def highest_pair(arr):
         (string): in a case where there are no pairs in the chosen hand
 
     Examples:
+        print( highest_pair([[2, '♠'], [5, '♣'], [8, '♥'], [11, '♥'], [5, '♥'], [12, '♥'], [5, '♦'], [7, '♥'], [6, '♥'], [1, '♠']]) )
+        >>> "There are no pairs in this hand"
+
+        print( highest_pair([[8, '♠'], [13, '♣'], [10, '♦'], [8, '♣'], [13, '♦']]) )
+        >>> [13, 13] 
+
+        print( highest_pair([[6, '♦'], [10, '♠'], [2, '♥'], [5, '♣'], [10, '♦'], [5, '♠'], [12, '♥'], [5, '♥'], [2, '♠']]) )
+        >>> [10, 10]
     """
     list = [x[0] for x in arr]
     mut_insertion_sort(list)
@@ -406,11 +422,11 @@ def highest_pair(arr):
     ITERATE_BACKWARD = -1
     LIST_INDEX_MIN = 0
     for i in range(LIST_INDEX_LENGTH, LIST_INDEX_MIN - 1, ITERATE_BACKWARD):
-        target = list.pop()
-        i -= ONE_REMOVED_OFFSET 
-
         if len(list) < CANNOT_MAKE_PAIR:
             break
+
+        target = list.pop()
+        i -= ONE_REMOVED_OFFSET 
 
         if len(list) > NO_INDEX_ERROR_POP_THREE:
             first_pop = list.pop()
@@ -445,7 +461,7 @@ def highest_pair(arr):
                 i += READD_ALL_POPS_OFFSET
 
         elif second_pop != INDEX_ERROR_PLACEHOLDER:
-            elif target == first_pop:
+            if target == first_pop:
                 return [target, first_pop]
             else:
                 list.append(second_pop)
@@ -460,8 +476,33 @@ def highest_pair(arr):
         
     return "There are no pairs in this hand" 
 
-def test_cases():
+def test_all_equal():
+    assert all_equal([[2, '♠'], [2, '♣'], [2, '♥']]) == True
+    assert all_equal([[7, '♠'], [2, '♣'], [2, '♥'], [2, '♦']]) == False 
 
+def test_shuffle():
+    assert shuffle([[2, '♠'], [5, '♣'], [8, '♥'], ['Jack', '♥'], [5, '♥'], ['Queen', '♥'], [5, '♦'], [7, '♥'], [6, '♥'], ['Ace', '♠']]) != [[2, '♠'], [5, '♣'], [8, '♥'], ['Jack', '♥'], [5, '♥'], ['Queen', '♥'], [5, '♦'], [7, '♥'], [6, '♥'], ['Ace', '♠']]
+    assert shuffle([[6, '♦'], [10, '♠'], [2, '♥'], [5, '♣'], [10, '♦'], [5, '♠'], ['Queen', '♥'], [5, '♥'], [2, '♠']]) != [[6, '♦'], [10, '♠'], [2, '♥'], [5, '♣'], [10, '♦'], [5, '♠'], ['Queen', '♥'], [5, '♥'], [2, '♠']]
+
+def test_three_of_a_kind():
+    assert three_of_a_kind([[2, '♠'], [5, '♣'], [8, '♥'], [11, '♥'], [5, '♥'], [11, '♥'], [5, '♦'], [7, '♥'], [6, '♥'], [1, '♠']]) == True
+    assert three_of_a_kind([[13, '♣'], [8, '♠'], [13, '♣'], [10, '♦'], [8, '♣'], [12, '♦']]) == False
+
+def test_pairs_amt():
+    assert pairs_amt([[2, '♠'], [5, '♣'], [8, '♥'], [11, '♥'], [5, '♥'], [12, '♥'], [5, '♦'], [7, '♥'], [6, '♥'], [1, '♠']]) == 0 
+    assert pairs_amt([[11, '♣'], [8, '♠'], [13, '♣'], [10, '♦'], [8, '♣'], [13, '♦']]) == 2
+
+def test_highest_pair():
+    assert highest_pair([[2, '♠'], [5, '♣'], [8, '♥'], [11, '♥'], [5, '♥'], [12, '♥'], [5, '♦'], [7, '♥'], [6, '♥'], [1, '♠']]) == "There are no pairs in this hand"
+    assert highest_pair([[8, '♠'], [13, '♣'], [10, '♦'], [8, '♣'], [13, '♦']]) == [13, 13] 
+    assert highest_pair([[6, '♦'], [10, '♠'], [2, '♥'], [5, '♣'], [10, '♦'], [5, '♠'], [12, '♥'], [5, '♥'], [2, '♠']]) == [10, 10]
+
+def test_cases():
+    test_all_equal()
+    test_shuffle()
+    test_three_of_a_kind()
+    test_pairs_amt()
+    test_highest_pair()
     return True
 
 def main():
@@ -522,7 +563,6 @@ def main():
                     rank_to_int(hands[hand_num])
                     break
 
-
             while True:
                 print("What operation do you want to do on the hand:")
                 print("   1. Check if all cards are equal")
@@ -535,7 +575,6 @@ def main():
                 print("\n")
 
                 match operation:
-
                     case constant.OP_ALL_EQUAL:
                         print(all_equal(hands[hand_num]))
                         int_to_rank(hands[hand_num])
