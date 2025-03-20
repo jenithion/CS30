@@ -238,7 +238,18 @@ def main():
     selection_sort_avg = average(selection_sort)
     insertion_sort_avg = average(insertion_sort)
 
-    print(linear_search_avg, binary_search_avg, bubble_sort_avg, selection_sort_avg, insertion_sort_avg)
+    print(f"Search Algorythm Times:")
+    print(f"Linear Search: {linear_search_avg}")
+    print(f"Binary Search: {linear_search_avg}")
+    fastest_search = "Binary Search" if binary_search_avg >= linear_search_avg else "Linear Search"
+    print(f"The fastest search algorythm was {fastest_search}")
+
+    print(f"\n Sorting Algorythm Times:")
+    print(f"Bubble Sort: {bubble_sort_avg}")
+    print(f"Selection Sort: {selection_sort_avg_avg}")
+    print(f"Insertion Sort: {insertion_sort_avg_avg}")
+    fastest_sort = "Insertion Sort" if insertion_sort_avg >= selection_sort_avg else "Selection Sort" 
+    print(f"The fastest sorting algorythm was {fastest_sort}")
 
 if __name__ == "__main__":
     main()
