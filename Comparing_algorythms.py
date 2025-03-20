@@ -1,25 +1,43 @@
 import random, string, copy, time
 
-def time_elapsed(function *args):
-    start = time.time()
-    function(args)
-    end = time.time
-    return end - start
+def get_time_elapsed(function, list, target=None):
+    if target == None:
+        start = time.time()
+        function(list)
+        end = time.time()
 
-def random_list(length, max_val, min_val):
+        ans = end - start
+        return ans
+    else:
+        start = time.time()
+        function(list, target)
+        end = time.time()
+
+        ans = end - start
+        return ans
+def gen_random_ints(length, min_val, max_val):
     arr = []
     for i in range(length):
         arr.append(random.randint(min_val, max_val))
     return arr
     
-def random_letters(length):
+def gen_random_letters(length):
     #Define letters to choose from
-    charachters = string.ascii_letters
-    
+    CHARACHTERS = string.ascii_letters
     
     arr = "".join(random.choice(charachters) for i in range(length))
         
     return arr
+
+def get_average(list):
+    LIST_LENGTH = len(list)
+
+    total = 0
+    for i in list:
+        total += i
+
+    ans = total / LIST_LENGTH 
+    return ans
 
 def linear_search(arr, target):
     """
@@ -78,7 +96,7 @@ def binary_search(arr, target):
     #target not found
     return -1
     
-def mut_bubble_sort(arr):
+def bubble_sort(list):
     """
     A mutating sort
     Sorts a list in ascending order using bubble sort
@@ -89,6 +107,9 @@ def mut_bubble_sort(arr):
     return:
         list: sorted list
     """
+    #create a copy of the list
+    arr = copy.copy(list) 
+    #get the length of the array
     n = len(arr)
     
     #list empty edge case
@@ -110,7 +131,7 @@ def mut_bubble_sort(arr):
     
     return arr
        
-def mut_selection_sort(arr):
+def selection_sort(list):
     """
     Prefoms selection sort on a array and returns a sorted array, it is also mutable so it changes the original argument
     
@@ -122,6 +143,8 @@ def mut_selection_sort(arr):
         >>> [2, 3, 4, 5, 8]
     
     """
+    #create a copy of the list
+    arr = copy.copy(list) 
     # get length of array
     n = len(arr) 
     
@@ -146,7 +169,7 @@ def mut_selection_sort(arr):
         
     return arr
     
-def mut_insertion_sort(arr):
+def insertion_sort(list):
     """
     Prefoms selection sort on a array and returns a sorted array, it is also mutable so it changes the original argument
     
@@ -157,7 +180,9 @@ def mut_insertion_sort(arr):
         mut_selection_sort([5, 3, 8, 4, 2])
         >>> [2, 3, 4, 5, 8]
     """
-    
+    #create a copy of list 
+    arr = copy.copy(list) 
+    #get length of the array
     n = len(arr)
     
     #list empty edge case
@@ -179,8 +204,44 @@ def mut_insertion_sort(arr):
         arr[j+1] = key
         
     return arr
-    
-arr2 = [5, 3, 8, 4, 2]
 
-assert linear_search(arr, 7) == 3
-assert binary_search(arr, 7 ) == 3
+def main():
+    REPEAT_AMT = 10000 
+    LIST_LENGTH = 65545
+    TARGET_MIN = 0
+    RANDOM_MIN_VAL = -32767
+    RANDOM_MAX_VAL = 32767 
+    FIX_INDEX = 1
+    
+    linear_search_times = []
+    binary_search_times = []
+    bubble_sort_times = []
+    selection_sort_times = []
+    insertion_sort_times = []
+
+    for reapat in range(REPEAT_AMT):
+        random_list = gen_random_ints(LIST_LENGTH, RANDOM_MIN_VAL, RANDOM_MAX_VAL)
+
+        bubble_sort_times.append( get_time_elapsed( bubble_sort, random_list ) )
+        selection_sort_times.append( get_time_elapsed( selection_sort, random_list ) )
+        insertion_sort_times.append( get_time_elapsed( insertion_sort, random_list ) )
+        
+        # random_target = random.randint(TARGET_MIN, LIST_LENGTH - FIX_INDEX)
+        # random_list.sort()
+        # linear_search_times.append( get_time_elapsed( linear_search, random_list, random_list[random_target] ) )
+        # binary_search_times.append( get_time_elapsed( binary_search, random_list, random_list[random_target] ) )
+  
+
+    
+    linear_search_avg = average(linear_search_times) 
+    binary_search_avg = average(binary_search_times)
+    bubble_sort_avg = average(bubble_sort)
+    selection_sort_avg = average(selection_sort)
+    insertion_sort_avg = average(insertion_sort)
+
+    print(linear_search_avg, binary_search_avg, bubble_sort_avg, selection_sort_avg, insertion_sort_avg)
+
+if __name__ == "__main__":
+    main()
+
+
