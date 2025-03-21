@@ -46,46 +46,93 @@ def part_one():
     print("Availible power Levels")
     print(pow)
 
-class partTwo:
-    def find_hero(index, hero_list, price_list):
-        """
-        Given a list of heros their price and their location in the list, the fuction will return a string containing their info, if the index is -1, meaning the hero isn't found,
-        the function will return a string stating that a hero of their chosing hasn't been found
+def part_two():
+    """
+    Prints out the welcome message for the main loop of part 2
     
-        Args:
-            (int)index: the index of where the hero is in the list
-            (string list)hero_list: an array of heros
-            (float list)price_list: an array for the price of hero's matching up with the index of the hero chosen
-        
-        Examples:
-        
-        """
-        NOT_FOUND = -1
-    
-        match index:
-            case NOT_FOUND:
-                print("Im sorry we do not have anyone with that powerlevel availible")
-            case _:
-                print(f"You have chosen to hire hero {hero_list[index]}. The total cost per hour is ${price_list[index]}.")
-           
-    def part_two():
-        """
-        Prints out the welcome message for the main loop of part 2
-        
-        Example:
-            Welcome to SuperHeros for Hire
-            We have many superheros availible. Our levels range from 1 to 9.99. What powerlevel do you require
-        """
-        while True:
-            print("Welcome to SuperHeros for Hire")
-            print("We have many superheros availible. Our levels range from 1 to 9.99. What powerlevel do you require")
-            target_pow = input()
-            hero_index = binary_search(pow, target_pow)
-            find_hero()
+    Example:
+        Welcome to SuperHeros for Hire
+        We have many superheros availible. Our levels range from 1 to 9.99. What powerlevel do you require
+    """
+    NOT_FOUND = -1
+    print("Welcome to SuperHeros for Hire")
+    print("We have many superheros availible. Our levels range from 1 to 9.99. What powerlevel do you require")
+    target_pow = input()
+    hero_index = binary_search(pow, target_pow)
+
+    match index:
+        case NOT_FOUND:
+            print("Im sorry we do not have anyone with that powerlevel availible")
+        case _:
+            print(f"You have chosen to hire hero {hero_list[index]}. The total cost per hour is ${price_list[index]}.")
 
 def part_three():
-    return True
- 
+    NOT_FOUND = -1
+    EMPLOYMENT_ENSURANCE = 1.2
+
+    print("Welcome to SuperHeros for Hire")
+    print("We have many superheroes available.  Our levels range from 1 to 9.99.  What power level do you require?")
+    target_pow = int(input())
+    hero_index = binary_search(pow, target_pow)
+    
+    match hero_index:
+        case NOT_FOUND:
+            print("Im sorry we do not have anyone with that powerlevel availible")
+        case _:
+            print(f"You have chosen to hire hero {hero_list[index]}. The total cost per hour is ${price_list[index]}.")
+
+    while True:
+        print("For how many hours do you need our superhero services?")
+        hours = int(input())
+        if hours < 3:
+            print("Heros can only work for a minimum of 3 Hours please try again")
+        else:
+            total_price = hours * price[hero_index] * EMPLOYMENT_ENSURANCE
+            print(f"Your total price including taxes and employment ensurance is ${total_price}")
+
+def part_four():
+    """
+    An employee may work a maximum of 12 hours a day
+    An employee is entitled to one 30-minute paid or unpaid break after the first 5 hours of work for shifts that are between 5 and 10 hours long.
+    For shifts 10 hours or longer, an employee is entitled to two 30-minute breaks.
+    An employee is not entitled to any breaks if their shift is 5 hours or less.
+    Add a loop that will exit if the user enters 0 for number of hours. (Make it say something snarky.)
+    """
+    NOT_FOUND = -1
+    EMPLOYMENT_ENSURANCE = 1.2
+
+    print("Welcome to SuperHeros for Hire")
+    print("We have many superheroes available.  Our levels range from 1 to 9.99.  What power level do you require?")
+    target_pow = int(input())
+    hero_index = binary_search(pow, target_pow)
+    
+    match hero_index:
+        case NOT_FOUND:
+            print("Im sorry we do not have anyone with that powerlevel availible")
+        case _:
+            print(f"You have chosen to hire hero {hero_list[index]}. The total cost per hour is ${price_list[index]}.")
+
+    while True:
+        print("For how many hours do you need our superhero services?")
+        hours = int(input())
+        if hours == 0:
+            break
+        elif hours < 3:
+            print("Heros can only work for a minimum of 3 Hours per day please try again")
+        elif hours > 12:
+            print("Heros can only work for a maximum of 12 Hours per day please try again")
+        else:
+            match (hours // 5):
+                case 0:
+                    total_price = hours * price[hero_index] * EMPLOYMENT_ENSURANCE
+                    print(f"Your total price including taxes and employment ensurance is ${total_price}")
+                case 1:
+                    total_price = (hours - 0.5) * price[hero_index] * EMPLOYMENT_ENSURANCE
+                    print(f"Your total price including taxes and employment ensurance is ${total_price}")
+                case 2:
+                    total_price = (hours - 1) * price[hero_index] * EMPLOYMENT_ENSURANCE
+                    print(f"Your total price including taxes and employment ensurance is ${total_price}")
+
 def main():
     """
     Runs a loop that asks the user for what powerlevel they require, printing out a superhero that matches their needs
