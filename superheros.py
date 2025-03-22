@@ -1,6 +1,6 @@
-name = []
-pow = []
-price = []
+hero_list = ["Generic Superhero", "Kazuya Kinoshita", "Rentarou Aijou", "Peacemaker", "Omniman", "Chainsaw man", "Satoru Gojo", "Sung Jin Woo", "Shadow", "......."]
+pow_list = [1, 1.1, 2.3, 4.8, 6.6, 8.1, 8.9, 9.4, 9.9, 9.99]
+price_list = [20, 13, 24, 30, 32, 34, 60, 65, 100, 1000]
 
 def binary_search(arr, target):
     """
@@ -44,7 +44,7 @@ def part_one():
     """
     print("Welcome to SuperHeros for Hire")
     print("Availible power Levels")
-    print(pow)
+    print(pow_list)
 
 def part_two():
     """
@@ -54,40 +54,46 @@ def part_two():
         Welcome to SuperHeros for Hire
         We have many superheros availible. Our levels range from 1 to 9.99. What powerlevel do you require
     """
-    NOT_FOUND = -1
+    class const():
+        NOT_FOUND = -1
     print("Welcome to SuperHeros for Hire")
     print("We have many superheros availible. Our levels range from 1 to 9.99. What powerlevel do you require")
-    target_pow = input()
+    print(f"Current Availible Power Levels {pow_list}")
+    target_pow = float(input())
     hero_index = binary_search(pow, target_pow)
 
     match index:
-        case NOT_FOUND:
+        case const.NOT_FOUND:
             print("Im sorry we do not have anyone with that powerlevel availible")
         case _:
-            print(f"You have chosen to hire hero {hero_list[index]}. The total cost per hour is ${price_list[index]}.")
+            print(f"You have chosen to hire hero {hero_list[hero_index]}. The total cost per hour is ${price_list[hero_index]}.")
 
 def part_three():
-    NOT_FOUND = -1
+    class const():
+        NOT_FOUND = -1
     EMPLOYMENT_ENSURANCE = 1.2
 
-    print("Welcome to SuperHeros for Hire")
-    print("We have many superheroes available.  Our levels range from 1 to 9.99.  What power level do you require?")
-    target_pow = int(input())
-    hero_index = binary_search(pow, target_pow)
-    
-    match hero_index:
-        case NOT_FOUND:
-            print("Im sorry we do not have anyone with that powerlevel availible")
-        case _:
-            print(f"You have chosen to hire hero {hero_list[index]}. The total cost per hour is ${price_list[index]}.")
+    while True:
+        print("Welcome to SuperHeros for Hire")
+        print("We have many superheroes available.  Our levels range from 1 to 9.99.  What power level do you require?")
+        print(f"Current Availible Power Levels {pow_list}")
+        target_pow = floatint(input())
+        hero_index = binary_search(pow_list, target_pow)
+
+        match hero_index:
+            case const.NOT_FOUND:
+                print("Im sorry we do not have anyone with that powerlevel availible")
+            case _:
+                print(f"You have chosen to hire hero {hero_list[hero_index]}. The total cost per hour is ${price_list[hero_index]}.")
+                break
 
     while True:
         print("For how many hours do you need our superhero services?")
-        hours = int(input())
+        hours = floatint(input())
         if hours < 3:
             print("Heros can only work for a minimum of 3 Hours please try again")
         else:
-            total_price = hours * price[hero_index] * EMPLOYMENT_ENSURANCE
+            total_price = hours * price_list[hero_index] * EMPLOYMENT_ENSURANCE
             print(f"Your total price including taxes and employment ensurance is ${total_price}")
 
 def part_four():
@@ -98,40 +104,61 @@ def part_four():
     An employee is not entitled to any breaks if their shift is 5 hours or less.
     Add a loop that will exit if the user enters 0 for number of hours. (Make it say something snarky.)
     """
-    NOT_FOUND = -1
+    #i need this for switch cases because variables dont work but properties do
+    class const():
+        ZERO_BREAKS = 0
+        ONE_BREAK = 1
+        TWO_BREAKS = 2
+        NOT_FOUND = -1
     EMPLOYMENT_ENSURANCE = 1.2
+    EXIT = 0
+    RUN = 1
+    DAY_MAX = 12
+    DAY_MIN = 3
+    HALF_HOUR_BREAK = 0.5
+    HOUR_BREAK = 1
+    HOURS_PER_BREAK = 5
 
-    print("Welcome to SuperHeros for Hire")
-    print("We have many superheroes available.  Our levels range from 1 to 9.99.  What power level do you require?")
-    target_pow = int(input())
-    hero_index = binary_search(pow, target_pow)
-    
-    match hero_index:
-        case NOT_FOUND:
-            print("Im sorry we do not have anyone with that powerlevel availible")
-        case _:
-            print(f"You have chosen to hire hero {hero_list[index]}. The total cost per hour is ${price_list[index]}.")
+    while True:
+        print("Welcome to SuperHeros for Hire")
+        print("We have many superheroes available.  Our levels range from 1 to 9.99.  What power level do you require?")
+        print(f"Current Availible Power Levels {pow_list}")
+        target_pow = float(input())
+        hero_index = binary_search(pow_list, target_pow)
+
+        match hero_index:
+            case const.NOT_FOUND:
+                print("Im sorry we do not have anyone with that powerlevel availible, please try again")
+            case _:
+                print(f"You have chosen to hire hero {hero_list[hero_index]}. The total cost per hour is ${price_list[hero_index]}.")
+                break
 
     while True:
         print("For how many hours do you need our superhero services?")
-        hours = int(input())
-        if hours == 0:
-            break
-        elif hours < 3:
+        hours = float(input())
+        if hours == EXIT:
+            return EXIT 
+        elif hours < DAY_MIN:
             print("Heros can only work for a minimum of 3 Hours per day please try again")
-        elif hours > 12:
+        elif hours > DAY_MAX:
             print("Heros can only work for a maximum of 12 Hours per day please try again")
         else:
-            match (hours // 5):
-                case 0:
-                    total_price = hours * price[hero_index] * EMPLOYMENT_ENSURANCE
+            break_amt = hours // HOURS_PER_BREAK 
+            match break_amt:
+                case const.ZERO_BREAKS:
+                    total_price = hours * price_list[hero_index] * EMPLOYMENT_ENSURANCE
                     print(f"Your total price including taxes and employment ensurance is ${total_price}")
-                case 1:
-                    total_price = (hours - 0.5) * price[hero_index] * EMPLOYMENT_ENSURANCE
+                    break
+                case const.ONE_BREAK:
+                    total_price = (hours - HALF_HOUR_BREAK) * price_list[hero_index] * EMPLOYMENT_ENSURANCE
                     print(f"Your total price including taxes and employment ensurance is ${total_price}")
-                case 2:
-                    total_price = (hours - 1) * price[hero_index] * EMPLOYMENT_ENSURANCE
+                    break
+                case const.TWO_BREAKS:
+                    total_price = (hours - HOUR_BREAK) * price_list[hero_index] * EMPLOYMENT_ENSURANCE
                     print(f"Your total price including taxes and employment ensurance is ${total_price}")
+                    break
+
+    return 1
 
 def main():
     """
@@ -141,10 +168,14 @@ def main():
     Examples:
         
     """
+    TRUE = 1
 
-        
-        
-    
-    
+    running = TRUE
+    while running == TRUE:
+        print("\n")
+        running = part_four() 
+
+    print("Huh, you dont need anyone anymore, well go on your merry way :)")
+
 if __name__ == "__main__":
     main()
