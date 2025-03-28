@@ -240,7 +240,7 @@ def main():
 
     print(f"Search Algorythm Times:")
     print(f"Linear Search: {linear_search_avg}")
-    print(f"Binary Search: {linear_search_avg}")
+    print(f"Binary Search: {binary_search_avg}")
     fastest_search = "Binary Search" if binary_search_avg >= linear_search_avg else "Linear Search"
     print(f"The fastest search algorythm was {fastest_search}")
 
