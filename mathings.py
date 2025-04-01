@@ -49,40 +49,71 @@ class Mathy():
         line3 = "inside of the class and ise its defined atributes"
         return "".join([line1, line2, line3])
 
+    @staticmethod
+    def name
+
 class main():
     @staticmethod
     def main():
-        while True:
-            try:
-                num1 = float(input("What is the first number you would like to use"))
-                num2 = float(input("What is the second number you would like to use"))
+        try:
+            while True:
+                print("1. Name")
+                print("2. Addition")
+                print("3. Subtraction")
+                print("4. Multiplication")
+                print("5. Division")
+                print("6. Hypotnuse")
+                print("7. Power")
+                print("8. Get Nth Digit")
+                print("9. Short Awnser 1")
+                print("10. Short Awnser 2")
+                print("11. Short Awnser 3")
+                print("12. Exit")
+                operation = int(input())
 
-                while True:
-                    try:
-                        print("What operation would you like to do on the numbers")
-                        print("1. Multiply")
-                        print("2. Add")
-                        print("3. Divide")
-                        print("4. Subtract")
-                        choice = int(input())
+                if operation < 1 and (operation > 12):
+                    print("Please input a valid number.")
 
-                    match choice:
-                        case 1:
-                            print(Mathy.multiply(num1, num2))
-                            break
+                else: 
+                    break
+                
+            while True:
+                if operation >= 2 and operation <= 8:
+                    num1 = float(input())
+                    num2 = float(input())
+                    match operation:
                         case 2:
-                            print(Mathy.add(num1, num2))
-                            break
+                            Mathy.add(num1, num2)
                         case 3:
-                            print(Mathy.divide(num1, num2))
-                            break
-                        case 4: 
-                            print(Mathy.subtract(num1, num2))
-                            break
-                        case _:
-                            print("The value youve inputed is not one of the options please try again")
+                            Mathy.subtract(num1, num2)
+                        case 4:
+                            Mathy.multiply(num1, num2)
+                        case 5:
+                            Mathy.divide(num1, num2)
+                        case 6:
+                            Mathy.hypotnuse(num1, num2)
+                        case 7:
+                            Mathy.pow(num1, num2)
+                        case 8:
+                            Mathy.getKthDigit(num1, num2)
 
-            except ValueError:
-                print("The value you've inputed is not a number please try again")
+                else:
+                    match operation:
+                        case 1:
+                            Mathy.name()
+                        case 10:
+                            Mathy.short1()
+                        case 11:
+                            Mathy.short2()
+                        case 12:
+                            Mathy.short3()
+                        case 13:
+                            break
+            break
+                
 
-    
+        except ValueError:
+            print("The value you've inputed is not a number please try again")
+
+if __name__ = "__main__":
+    main()
