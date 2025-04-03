@@ -4,10 +4,8 @@ class Rectangle():
         self.__width = width
         self.__length = length
         self.__height = height
-        self.__2d_area = self.__length * self.__width
-        self.__3d_area = (self.__2d_area * 2) + (self.__width * self.__height * 2) + (self.__length * self.__height * 2)
+        self.area = (self.__length * self.__width) if (height == 0) else (self.__2d_area * 2) + (self.__width * self.__height * 2) + (self.__length * self.__height * 2)
         self.__perimiter = (2 * width) + (2 * length)
-        self.__area = self.__2d_area if (self.__height == 0) else self.__3d_area
         self.__volume = "" if (self.__height == 0) else (self.__2d_area * height)
 
     def get_name(self):
