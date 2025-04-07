@@ -50,7 +50,8 @@ class Mathy():
         return "".join([line1, line2, line3])
 
     @staticmethod
-    def name
+    def name():
+        return "Ethan"
 
 class main():
     @staticmethod
@@ -109,11 +110,10 @@ class main():
                             Mathy.short3()
                         case 13:
                             break
-            break
                 
 
         except ValueError:
             print("The value you've inputed is not a number please try again")
 
-if __name__ = "__main__":
+if __name__ == "__main__":
     main()

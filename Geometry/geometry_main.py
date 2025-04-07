@@ -32,11 +32,32 @@ if __name__ == "__main__":
                 print(rectangle_list.print_perimiter())
                 print(rectangle_list.print_volume())
 
+            while True:
+                print("What type of unit would you like to use")
+                print("\n 1. feet")
+                print("\n 2. Meters")
+                print("\n 3. Timbits")
+                unit = int(input())
+                if unit > 3 and unit < 1:
+                    print("Please input a valid number.")
+                else:
+                    break
+
             target = input("What circle do you want to search for?\n")
-            linear_search(cicles_list, target)
+            target_index = search(cicles_list, target)
+
+            if target_index != -1:
+                print(f"{circle_list[target_index]}")
+            else:
+                print("")
 
             target = input("What rectangle do you want to search for?\n")
-            linear_search(rectangle_list_list, target)
+            target_index = search(rectangle_list_list, target)
+
+            if target_index != -1:
+                print(f"{circle_list[target_index]}")
+            else:
+                print("")
 
     Main.main()
 
