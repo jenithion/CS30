@@ -49,7 +49,7 @@ if __name__ == "__main__":
             if target_index != -1:
                 print(f"{circle_list[target_index]}")
             else:
-                print("")
+                print("The Item you are tyring to find isn't one avalible.")
 
             target = input("What rectangle do you want to search for?\n")
             target_index = search(rectangle_list_list, target)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
             if target_index != -1:
                 print(f"{circle_list[target_index]}")
             else:
-                print("")
+                print("The Item you are tyring to find isn't one avalible.")
 
     Main.main()
 
